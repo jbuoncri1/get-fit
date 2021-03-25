@@ -1,0 +1,34 @@
+{
+  "name": "get-fit",
+  "version": "1.0.0",
+  "description": "A Health Application that helps track yor progress of fat loss and muscle gain",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jbuoncri1/get-fit.git"
+  },
+  "author": "james buoncristiani (jbuoncri1)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jbuoncri1/get-fit/issues"
+  },
+  "homepage": "https://github.com/jbuoncri1/get-fit#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.13.10",
+    "@babel/preset-env": "^7.13.12",
+    "@babel/preset-react": "^7.12.13",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^5.2.0",
+    "html-webpack-plugin": "^5.3.1",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.28.0",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2"
+  }
+}
