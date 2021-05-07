@@ -1,8 +1,12 @@
-const jwt = require('jsonwebtoken')
+const { verify } = require('jsonwebtoken')
+const { promisify } = require('util')
 const { errorMessage, statusCodes } = require('../helper/status')
 
-const verifyAuth = async (req, res, next) => {
-  const token = req.headers['x-access-token']
+const jwtVerify = promisify(verify)
+
+module.exports = async (req, res, next) => {
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
 
   if (!token) {
     errorMessage.message = 'No token provided'
@@ -10,7 +14,7 @@ const verifyAuth = async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.SECRET_KEY)
+    const decoded = await jwtVerify(token, process.env.SECRET_KEY)
     const { userId, email } = decoded
     
     req.user = {
@@ -23,8 +27,4 @@ const verifyAuth = async (req, res, next) => {
     errorMessage.error = 'Authentication Failed'
     return res.status(statusCodes.UNAUTHORIZED).send(errorMessage)
   }
-}
-
-module.exports = {
-  verifyAuth
 }

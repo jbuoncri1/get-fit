@@ -21,16 +21,17 @@ const createUser = async (req, res) => {
     const { rows } = await query(createUserQuery, values)
     const row = rows[0]
 
-    const data = {
-      id: row.id,    
-      email: row.email,
-      createdAt: row.created_at
+    const response = {
+      status: 'success',
+      code: statusCodes.CREATED,
+      data: {
+        id: row.id,    
+        email: row.email,
+        createdAt: row.created_at
+      }
     }
-    const token = await generateAccessToken(row.id, row.email)
-    successMessage.data = data
-    successMessage.token = token
 
-    return res.status(statusCodes.CREATED).json(successMessage)
+    return res.status(statusCodes.CREATED).json(response)
   } catch (err) {
     if (err.code = 23505) {
       return res.status(statusCodes.BAD_REQUEST).json({ error: `User already exists` })
@@ -58,10 +59,13 @@ const loginUser = async (req, res) => {
     }
 
     const token = await generateAccessToken(foundUser.id, foundUser.email)
-    successMessage.token = token
-    res.status(statusCodes.CREATED).json(successMessage)
 
-    return res.json(response)
+    const response = {
+      status: 'SUCCESS',
+      code: statusCodes.CREATED,
+      token
+    }
+    return res.status(statusCodes.CREATED).json(response)
   } catch (err) {
     res.status(statusCodes.NOT_FOUND).json(err)
   }
