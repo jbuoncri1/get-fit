@@ -1,8 +1,9 @@
 const express = require('express')
 const router = express.Router()
 
-router.get('/', (req, res) => {
-  res.json({ message: 'Api goes here' })
-})
+const { verifyAuth } = require('../middleware/verifyAuth')
+
+router.use('/auth', require('./auth/authRoute'))
+router.use('/profile', verifyAuth, require('./profile/profileRoute'))
 
 module.exports = router

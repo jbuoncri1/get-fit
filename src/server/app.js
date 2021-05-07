@@ -1,6 +1,8 @@
 const express = require('express')
 const log = require('loglevel')
 const app = express()
+const query = require('./model/query')
+require('dotenv').config()
 
 const PORT = process.env.PORT || 8081
 

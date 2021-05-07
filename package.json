@@ -26,16 +26,20 @@
   },
   "homepage": "https://github.com/jbuoncri1/get-fit#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "loglevel": "^1.7.1",
     "materialize-css": "^1.0.0",
+    "moment": "^2.29.1",
     "pg": "^8.6.0",
-    "pg-template-string": "^1.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.3",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
+    "sql-template-strings": "^2.2.2",
     "uuid": "^3.4.0"
   },
   "devDependencies": {
