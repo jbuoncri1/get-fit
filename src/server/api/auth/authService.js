@@ -2,7 +2,7 @@ const moment = require('moment')
 
 const query = require('../../model/query')
 const { hashPassword, generateAccessToken, comparePasswords } = require('../../helper/validation')
-const { successMessage, errorMessage, statusCodes } = require('../../helper/status')
+const { statusCodes } = require('../../helper/status')
 
 const createUser = async (req, res) => {
   const { email, password } = req.body
@@ -46,19 +46,23 @@ const loginUser = async (req, res) => {
     const { rows } = await query(findUserQuery, [email])
 
     if (!rows.length) {
-      errorMessage.message = 'User not found'
-      return res.status(statusCodes.NOT_FOUND).json(errorMessage)
+      return res.status(statusCodes.NOT_FOUND).json({
+        status: 'error',
+        message: 'User not found'
+      })
     }
 
     const foundUser = rows[0]
     const samePasswords = await comparePasswords(password, foundUser.password)
 
     if (!samePasswords) {
-      errorMessage.message = 'Invalid username or password'
-      return res.status(statusCodes.UNAUTHORIZED).json(errorMessage)
+      return res.status(statusCodes.UNAUTHORIZED).json({
+        status: 'error',
+        message: 'Invalid username or password'
+      })
     }
 
-    const token = await generateAccessToken(foundUser.id, foundUser.email)
+    const token = generateAccessToken(foundUser.id, foundUser.email)
 
     const response = {
       status: 'SUCCESS',

@@ -8,16 +8,6 @@ const statusCodes = {
   INTERNAL_SERVER_ERROR:500
 }
 
-const successMessage = {
-  status: 'success'
-}
-
-const errorMessage = {
-  status: 'error'
-}
-
 module.exports = {
-  successMessage,
-  errorMessage,
   statusCodes
 }
