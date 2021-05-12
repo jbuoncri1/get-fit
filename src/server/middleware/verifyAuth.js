@@ -1,6 +1,6 @@
 const { verify } = require('jsonwebtoken')
 const { promisify } = require('util')
-const { errorMessage, statusCodes } = require('../helper/status')
+const { statusCodes } = require('../helper/status')
 
 const jwtVerify = promisify(verify)
 
@@ -9,8 +9,10 @@ module.exports = async (req, res, next) => {
   const token = authHeader && authHeader.split(' ')[1]
 
   if (!token) {
-    errorMessage.message = 'No token provided'
-    return res.status(statusCodes.BAD_REQUEST).json(errorMessage)
+    return res.status(statusCodes.BAD_REQUEST).json({
+      status: 'error',
+      message: 'No token provided'
+    })
   }
 
   try {
@@ -24,7 +26,10 @@ module.exports = async (req, res, next) => {
 
     next()
   } catch (err) {
-    errorMessage.error = 'Authentication Failed'
-    return res.status(statusCodes.UNAUTHORIZED).send(errorMessage)
+    return res.status(statusCodes.UNAUTHORIZED).send({
+      status: 'error',
+      message: 'Authentication Failed',
+      err
+    })
   }
 }

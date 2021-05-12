@@ -1,5 +1,5 @@
-const express = require('express')
-const router = express.Router()
+const { Router } = require('express')
+const router = Router()
 
 const {
   createUser,
@@ -7,7 +7,6 @@ const {
 } = require('./authService')
 
 router.post('/signup', createUser)
-
 router.post('/login', loginUser)
 
 module.exports = router

@@ -1,4 +1,4 @@
-const { statusCodes, errorMessage } = require('../../helper/status')
+const { statusCodes } = require('../../helper/status')
 const query = require('../../model/query')
 
 const getProfile = async (req, res) => {
@@ -9,8 +9,10 @@ const getProfile = async (req, res) => {
     const { rows } = await query(getUserProfileQuery, [userId])
 
     if (!rows.length) {
-      errorMessage.message = 'User not found'
-      return res.status(404).json(errorMessage)
+      return res.status(statusCodes.BAD_REQUEST).json({
+        status: 'error',
+        message: 'User not found'
+      })
     }
 
     const user = rows[0]
@@ -24,8 +26,10 @@ const deleteUser = async (req, res) => {
   const { userId } = req.user
 
   if (!userId) {
-    errorMessage.message = 'User not found'
-    return res.status(statusCodes.NOT_FOUND).json(errorMessage)
+    return res.status(statusCodes.NOT_FOUND).json({
+      status: 'error',
+      message: 'User not found'
+    })
   }
 
   const deleteUserQuery = `DELETE FROM users WHERE id = $1`
