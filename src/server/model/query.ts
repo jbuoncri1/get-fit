@@ -1,10 +1,15 @@
-import { QueryResult } from 'pg'
+import { QueryResult, Query } from 'pg'
 
 import pool from './config'
 
-export default (queryText: string, params: Array<any>): Promise<QueryResult> => {
+interface IQuery {
+  text: string
+  values: Array<any>
+}
+
+export default (query: IQuery): Promise<QueryResult> => {
   return new Promise((resolve, reject) => {
-    pool.query(queryText, params)
+    pool.query(query)
       .then(res => resolve(res))
       .catch(err => reject(err))
   })
