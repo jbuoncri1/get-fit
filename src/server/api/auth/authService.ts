@@ -1,10 +1,11 @@
-const moment = require('moment')
+import { Request, Response } from 'express'
+import moment from 'moment'
 
-const query = require('../../model/query')
-const { hashPassword, generateAccessToken, comparePasswords } = require('../../helper/validation')
-const { statusCodes } = require('../../helper/status')
+import query from '../../model/query'
+import { hashPassword, generateAccessToken, comparePasswords } from '../../helper/validation'
+import { statusCodes } from '../../helper/status'
 
-const createUser = async (req, res) => {
+export const createUser = async (req: Request, res: Response): Promise<Response> => {
   const { email, password } = req.body
   const hashedPassword = await hashPassword(password)
   const createdAt = moment()
@@ -39,7 +40,7 @@ const createUser = async (req, res) => {
   }
 }
 
-const loginUser = async (req, res) => {
+export const loginUser = async (req: Request, res: Response): Promise<Response> => {
   const { email, password } = req.body
   try {
     const findUserQuery = `SELECT id, email, password FROM users WHERE email = $1`
@@ -74,8 +75,3 @@ const loginUser = async (req, res) => {
     res.status(statusCodes.NOT_FOUND).json(err)
   }
 } 
-
-module.exports = {
-  createUser,
-  loginUser
-}

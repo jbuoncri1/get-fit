@@ -1,7 +1,9 @@
-const { statusCodes } = require('../../helper/status')
-const query = require('../../model/query')
+import { Request, Response } from 'express'
 
-const getProfile = async (req, res) => {
+import { statusCodes } from '../../helper/status'
+import query from '../../model/query'
+
+export const getProfile = async (req: Request, res: Response): Promise<Response> => {
   const { userId } = req.user
   const getUserProfileQuery = `SELECT * FROM users WHERE id = $1`
 
@@ -16,13 +18,14 @@ const getProfile = async (req, res) => {
     }
 
     const user = rows[0]
+    delete user.password
     return res.json(user)
   } catch (err) {
     return res.status(statusCodes.INTERNAL_SERVER_ERROR).json(err)
   }
 }
 
-const deleteUser = async (req, res) => {
+export const deleteUser = async (req: Request, res: Response): Promise<Response> => {
   const { userId } = req.user
 
   if (!userId) {
@@ -41,9 +44,4 @@ const deleteUser = async (req, res) => {
   } catch (err) {
     return res.status(statusCodes.INTERNAL_SERVER_ERROR).json(err)
   }
-}
-
-module.exports = {
-  getProfile,
-  deleteUser
 }
