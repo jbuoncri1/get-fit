@@ -1,24 +1,19 @@
-const moment = require('moment')
+import { Request, Response } from 'express'
+import moment from 'moment'
 
-const query = require('../../model/query')
-const { hashPassword, generateAccessToken, comparePasswords } = require('../../helper/validation')
-const { statusCodes } = require('../../helper/status')
+import { createUserQuery, findUserQuery } from './authQueryStrings'
+import query from '../../model/query'
+import { hashPassword, generateAccessToken, comparePasswords } from '../../helper/validation'
+import { statusCodes } from '../../helper/status'
+import { IUserCredentials } from '../../model/types/user'
 
-const createUser = async (req, res) => {
-  const { email, password } = req.body
+export const createUser = async (req: Request, res: Response): Promise<Response> => {
+  const { email, password }: IUserCredentials = req.body
   const hashedPassword = await hashPassword(password)
   const createdAt = moment()
 
-  const createUserQuery = `
-    INSERT INTO
-    users(email, password, created_at)
-    VALUES($1, $2, $3)
-    returning *`
-
-  const values = [email, hashedPassword, createdAt]
-
   try {
-    const { rows } = await query(createUserQuery, values)
+    const { rows } = await query({ text: createUserQuery, values: [email, hashedPassword, createdAt] })
     const row = rows[0]
 
     const response = {
@@ -39,11 +34,11 @@ const createUser = async (req, res) => {
   }
 }
 
-const loginUser = async (req, res) => {
-  const { email, password } = req.body
+export const loginUser = async (req: Request, res: Response): Promise<Response> => {
+  const { email, password }: IUserCredentials = req.body
   try {
-    const findUserQuery = `SELECT id, email, password FROM users WHERE email = $1`
-    const { rows } = await query(findUserQuery, [email])
+    
+    const { rows } = await query({ text: findUserQuery, values:[email] })
 
     if (!rows.length) {
       return res.status(statusCodes.NOT_FOUND).json({
@@ -74,8 +69,3 @@ const loginUser = async (req, res) => {
     res.status(statusCodes.NOT_FOUND).json(err)
   }
 } 
-
-module.exports = {
-  createUser,
-  loginUser
-}
