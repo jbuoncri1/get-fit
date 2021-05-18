@@ -3,7 +3,7 @@ import { verify } from 'jsonwebtoken'
 import { promisify } from 'util'
 
 import { statusCodes } from '../helper/status'
-import { IUserAuth } from '../model/types/user'
+import { UserAuthType } from '../model/types/user'
 
 const jwtVerify = promisify(verify)
 
@@ -19,7 +19,7 @@ export default async (req: Request, res: Response, next: NextFunction): Promise<
   }
 
   try {
-    const decoded: IUserAuth = await jwtVerify(token, process.env.SECRET_KEY)
+    const decoded: UserAuthType = await jwtVerify(token, process.env.SECRET_KEY)
     const { userId, email } = decoded
     
     req.user = {

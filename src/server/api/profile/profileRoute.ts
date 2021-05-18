@@ -1,11 +1,13 @@
 import { Router } from 'express'
 const router = Router()
 
-import { getProfileInfo, deleteProfile, updatePersonalInfo } from './profileService'
+import { getProfile, deleteProfile, updateProfile, addPersonalInfo } from './profileService'
 
 router.route('/')
-  .get(getProfileInfo)
-  .put(updatePersonalInfo)
+  .get(getProfile)
+  .put(updateProfile)
   .delete(deleteProfile)
+
+router.put('/info', addPersonalInfo)
 
 export default router

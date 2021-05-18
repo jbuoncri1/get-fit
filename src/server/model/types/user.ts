@@ -1,14 +1,14 @@
-export interface IUserAuth {
+export interface UserAuthType {
   userId: string
   email: string
 }
 
-export interface IUserCredentials {
+export interface UserCredentialsType {
   email: string
   password: string
 }
 
-export interface IUserPersonalInfo {
+export interface UserPersonalInfoType {
   first_name: string
   last_name: string
   height: number

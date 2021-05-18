@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
 
-import { getProfileInfoQuery, deleteProfileQuery, updateProfileQuery } from './profileQueryStrings'
+import { getProfileInfoQuery, deleteProfileQuery, addPersonalInfoQuery, updateProfileInfoQuery } from './profileQueryBuilders'
 import { statusCodes } from '../../helper/status'
 import query from '../../model/query'
-import { IUserPersonalInfo } from '../../model/types/user'
+import { UserPersonalInfoType } from '../../model/types/user'
 
-export const getProfileInfo = async (req: Request, res: Response): Promise<Response> => {
+export const getProfile = async (req: Request, res: Response): Promise<Response> => {
   const { userId } = req.user
 
   try {
@@ -45,18 +45,31 @@ export const deleteProfile = async (req: Request, res: Response): Promise<Respon
   }
 }
 
-export const updatePersonalInfo = async (req: Request, res: Response): Promise<Response> => {
+export const addPersonalInfo = async (req: Request, res: Response): Promise<Response> => {
   const { userId } = req.user
 
-  const { first_name, last_name, gender, height, weight, date_of_birth } = req.body
+  const { first_name, last_name, gender, height, weight, date_of_birth }: UserPersonalInfoType = req.body
   const dateOfBirth = moment(date_of_birth)
   const modifiedAt = moment()
 
   const values = [first_name, last_name, gender, height, weight, dateOfBirth, modifiedAt, userId]
 
   try {
-    await query({ text: updateProfileQuery, values })
-    return res.status(204).json()
+    await query({ text: addPersonalInfoQuery, values })
+    return res.status(statusCodes.NO_CONTENT).json()
+  } catch (err) {
+    return res.json(err)
+  }
+}
+
+export const updateProfile = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { userId } = req.user
+
+    const queryParams = await updateProfileInfoQuery(userId, req.body)
+    await query(queryParams)
+
+    return res.status(statusCodes.NO_CONTENT).json()
   } catch (err) {
     return res.json(err)
   }

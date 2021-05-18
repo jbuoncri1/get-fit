@@ -1,14 +1,14 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
 
-import { createUserQuery, findUserQuery } from './authQueryStrings'
+import { createUserQuery, findUserQuery } from './authQueryBuilders'
 import query from '../../model/query'
 import { hashPassword, generateAccessToken, comparePasswords } from '../../helper/validation'
 import { statusCodes } from '../../helper/status'
-import { IUserCredentials } from '../../model/types/user'
+import { UserCredentialsType } from '../../model/types/user'
 
 export const createUser = async (req: Request, res: Response): Promise<Response> => {
-  const { email, password }: IUserCredentials = req.body
+  const { email, password }: UserCredentialsType = req.body
   const hashedPassword = await hashPassword(password)
   const createdAt = moment()
 
@@ -35,7 +35,7 @@ export const createUser = async (req: Request, res: Response): Promise<Response>
 }
 
 export const loginUser = async (req: Request, res: Response): Promise<Response> => {
-  const { email, password }: IUserCredentials = req.body
+  const { email, password }: UserCredentialsType = req.body
   try {
     
     const { rows } = await query({ text: findUserQuery, values:[email] })
