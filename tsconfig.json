@@ -1,12 +1,16 @@
 {
   "compilerOptions": {
     "target": "es6",
+    "lib": [
+      "DOM",
+      "ESNext"
+    ],
     "outDir": "dist",
     "sourceMap": true,
     "moduleResolution": "node",
     "noImplicitAny": false,
     "module": "commonjs",
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "typeRoots": [
